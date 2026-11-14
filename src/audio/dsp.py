@@ -9,7 +9,7 @@ from pedalboard import (
 )
 from src.config import TARGET_SAMPLE_RATE
 
-# 1. NORMAL VOICE DSP: Crisp metallic Cephalon resonator (keep as-is since you liked it!)
+# 1. NORMAL VOICE DSP: Crisp metallic Cephalon resonator not really game-accurate but i try
 NORMAL_PEDALBOARD = Pedalboard([
     HighpassFilter(cutoff_frequency_hz=220),
     Delay(delay_seconds=0.012, feedback=0.15, mix=0.22),
@@ -19,9 +19,9 @@ NORMAL_PEDALBOARD = Pedalboard([
 
 # 2. GLITCH VOICE DSP: Zero PitchShift/Distortion so your Glitch Clone stays 100% intelligible
 GLITCH_PEDALBOARD = Pedalboard([
-    HighpassFilter(cutoff_frequency_hz=120),  # Keep the natural low-end from your angry clone
+    HighpassFilter(cutoff_frequency_hz=120),
     LowpassFilter(cutoff_frequency_hz=6500),
-    Delay(delay_seconds=0.015, feedback=0.20, mix=0.25),  # Tight metallic double
+    Delay(delay_seconds=0.015, feedback=0.20, mix=0.25),
     Compressor(threshold_db=-18, ratio=3.5),
     Limiter(threshold_db=-3.0),
 ])
