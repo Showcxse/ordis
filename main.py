@@ -111,7 +111,7 @@ def main() -> None:
                     continue
 
             # ==================================================================
-            # EXIT & GEMINI EXECUTION
+            # EXIT & MODEL EXECUTION
             # ==================================================================
             if user_input.lower() in ("exit", "quit", "q"):
                 exit_line = "Entering standby mode. Please return <glitch>COVERED IN BLOOD</glitch> — safe and sound, Operator."
@@ -122,7 +122,22 @@ def main() -> None:
 
             segments = ordis.send(user_input)
             render_ordis_output(segments)
-            voice.speak(segments)
+            #11/26/26 -- updated to handle possibility of interruption during speech
+            #voice.speak(segments)
+            was_interrupted = voice.speak(segments)
+
+            if was_interrupted:
+                console.print("[bold yellow] [Interrupted by Operator][/bold yellow]\n")
+                #listen to what interrupted on hands-free mode
+                if hands_free_mode:
+                    play_ack_chime()
+                    console.print("[bold yellow] Ordis is listening... [/bold yellow]")
+                    cmd_text, is_op, score = ears.listen_and_transcribe()
+                    if cmd_text:
+                        user_input = format_biometric_prompt(cmd_text, is_op, score)
+                        segments = ordis.send(user_input)
+                        render_ordis_output(segments)
+                        voice.speak(segments)
 
         except KeyboardInterrupt:
             console.print("\n[cyan][ORDIS]: Interrupted! Standing down, Operator.[/cyan]")
